@@ -5,6 +5,7 @@ import { SelectorGrupos } from "./components/SelectorGrupos";
 import { ListaAlumnos } from "./components/ListaAlumnos";
 import { ControlInput } from "./components/ControlInput";
 import { LoginForm } from "./components/LoginForm";
+import { FormularioAlumno } from "./components/FormularioAlumno";
 
 function App() {
   const [promocion, setPromocion] = useState("");
@@ -12,19 +13,23 @@ function App() {
   const [nombre, setNombre] = useState("");
   const [usuario, setUsuario] = useState("");
   const [password, setPassword] = useState("");
+  const [isAdmin, setIsAdmin] = useState(false);
   const [logueado, setLogueado] = useState(false);
+  const [modalAbierto, setModalAbierto] = useState(false);
+  const [alumnoEditar, setAlumnoEditar] = useState(null);
 
   const datosPromo = ["25/26", "26/27", "27/28"];
 
   const datosGrupos = ["DAW1", "SMX", "ARI", "IEA"];
 
   const usuarios = [
-    { username: "admin", password: "123" },
-    { username: "edgar", password: "321" },
+    { username: "admin", password: "123", role: "admin" },
+    { username: "user", password: "123", role: "user" },
   ];
 
-  const datosAlumnos = [
+  const [datosAlumnos, setDatosAlumnos] = useState([
     {
+      id: 1,
       nombre: "pepe",
       apellido: "sanchez",
       promocion: "25/26",
@@ -32,6 +37,7 @@ function App() {
       img: "https://randomuser.me/api/portraits/men/1.jpg",
     },
     {
+      id: 2,
       nombre: "ana",
       apellido: "lopez",
       promocion: "26/27",
@@ -39,7 +45,7 @@ function App() {
       img: "https://randomuser.me/api/portraits/women/2.jpg",
     },
     {
-      nombre: "maria",
+      id: 3,
       apellido: "gomez",
       promocion: "27/28",
       grupo: "ARI",
@@ -150,7 +156,7 @@ function App() {
       grupo: "SMX",
       img: "https://randomuser.me/api/portraits/men/18.jpg",
     },
-  ];
+  ]);
 
   useEffect(() => {
     const usuarioGuardado = localStorage.getItem("usuario");
@@ -158,6 +164,22 @@ function App() {
       setLogueado(true);
     }
   }, []);
+
+  const abrirModal = (alumno) => {
+    setAlumnoEditar(alumno);
+    setModalAbierto(true);
+  };
+
+  const cerrarModal = () => {
+    setAlumnoEditar(null);
+    setModalAbierto(false);
+  };
+
+  const eliminarAlumno = (index) => {
+    const nuevoArray = datosAlumnos.filter((_, i) => i !== index);
+    console.log("Alumno eliminado");
+    setDatosAlumnos(nuevoArray);
+  };
 
   function entrar(e) {
     e.preventDefault();
@@ -167,9 +189,27 @@ function App() {
     if (usuarioValidado) {
       setLogueado(true);
       localStorage.setItem("usuario", usuario);
+      if (usuarioValidado.role === "admin") {
+        setIsAdmin(true);
+      } else {
+        setIsAdmin(false);
+      }
     } else {
       alert("Usuario o contraseña incorrectos");
     }
+  }
+
+  function guardarCambios(alumnoEditado) {
+    const nuevoArray = datosAlumnos.map((a) => {
+      // Compara por referencia del objeto original
+      if (a === alumnoEditar) {
+        return alumnoEditado;
+      }
+      return a;
+    });
+
+    setDatosAlumnos(nuevoArray);
+    console.log("Cambios guardados", alumnoEditado);
   }
 
   function salir() {
@@ -214,91 +254,105 @@ function App() {
           entrar={entrar}
         />
       ) : (
-        <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
-          {/* Header con título principal */}
-          <header className="bg-white shadow-sm border-b border-gray-200">
-            <div className="max-w-7xl mx-auto px-4 py-6">
-              <div className="flex justify-between items-center">
+        <>
+          <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+            {/* Header con título principal */}
+            <header className="bg-white shadow-sm border-b border-gray-200">
+              <div className="max-w-7xl mx-auto px-4 py-6">
+                <div className="flex justify-between items-center">
+                  <div>
+                    <h1 className="text-4xl font-bold text-gray-800">
+                      Anuario de Alumnos
+                    </h1>
+                    <p className="text-gray-500 mt-1">
+                      Encuentra estudiantes por promoción, grupo o nombre
+                    </p>
+                  </div>
+                  <button
+                    onClick={salir}
+                    className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
+                  >
+                    Cerrar sesión
+                  </button>
+                </div>
+              </div>
+            </header>
+
+            {/* Contenedor principal */}
+            <main className="max-w-7xl mx-auto px-4 py-8">
+              {/* Sección de filtros */}
+              <div className="bg-white rounded-lg shadow-sm p-6 mb-8">
+                <h2 className="text-xl font-semibold text-gray-700 mb-4">
+                  Filtros
+                </h2>
+
+                {/* Contenedor de selectores en línea */}
+                <div className="flex flex-wrap gap-4 mb-6">
+                  {/* Selector de promocion */}
+                  <div className="flex-1 min-w-[200px]">
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Promoción
+                    </label>
+                    <SelectorPromocion
+                      datosPromo={datosPromo}
+                      controlPromocion={controlPromocion}
+                      promocion={promocion}
+                    />
+                  </div>
+
+                  {/* Selector de grupos */}
+                  <div className="flex-1 min-w-[200px]">
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Grupo
+                    </label>
+                    <SelectorGrupos
+                      datosGrupo={datosGrupos}
+                      controlGrupo={controlGrupo}
+                      grupo={grupo}
+                    />
+                  </div>
+                </div>
+
+                {/* Buscador de alumnos por nombre y apellido */}
                 <div>
-                  <h1 className="text-4xl font-bold text-gray-800">
-                    Anuario de Alumnos
-                  </h1>
-                  <p className="text-gray-500 mt-1">
-                    Encuentra estudiantes por promoción, grupo o nombre
-                  </p>
-                </div>
-                <button
-                  onClick={salir}
-                  className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
-                >
-                  Cerrar sesión
-                </button>
-              </div>
-            </div>
-          </header>
-
-          {/* Contenedor principal */}
-          <main className="max-w-7xl mx-auto px-4 py-8">
-            {/* Sección de filtros */}
-            <div className="bg-white rounded-lg shadow-sm p-6 mb-8">
-              <h2 className="text-xl font-semibold text-gray-700 mb-4">
-                Filtros
-              </h2>
-
-              {/* Contenedor de selectores en línea */}
-              <div className="flex flex-wrap gap-4 mb-6">
-                {/* Selector de promocion */}
-                <div className="flex-1 min-w-[200px]">
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Promoción
+                    Buscar por nombre o apellido
                   </label>
-                  <SelectorPromocion
-                    datosPromo={datosPromo}
-                    controlPromocion={controlPromocion}
-                    promocion={promocion}
-                  />
-                </div>
-
-                {/* Selector de grupos */}
-                <div className="flex-1 min-w-[200px]">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Grupo
-                  </label>
-                  <SelectorGrupos
-                    datosGrupo={datosGrupos}
-                    controlGrupo={controlGrupo}
-                    grupo={grupo}
-                  />
+                  <ControlInput nombre={setNombre} />
                 </div>
               </div>
 
-              {/* Buscador de alumnos por nombre y apellido */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Buscar por nombre o apellido
-                </label>
-                <ControlInput nombre={setNombre} />
+              {/* Contador de resultados */}
+              <div className="mb-4">
+                <p className="text-gray-600">
+                  <span className="font-semibold text-gray-800">
+                    {alumnosFiltrados.length}
+                  </span>{" "}
+                  {alumnosFiltrados.length === 1
+                    ? "alumno encontrado"
+                    : "alumnos encontrados"}
+                </p>
               </div>
-            </div>
 
-            {/* Contador de resultados */}
-            <div className="mb-4">
-              <p className="text-gray-600">
-                <span className="font-semibold text-gray-800">
-                  {alumnosFiltrados.length}
-                </span>{" "}
-                {alumnosFiltrados.length === 1
-                  ? "alumno encontrado"
-                  : "alumnos encontrados"}
-              </p>
-            </div>
-
-            {/* Contenedor de las tarjetas */}
-            <div className="flex flex-wrap justify-center gap-6">
-              <ListaAlumnos datosAlumnos={alumnosFiltrados} />
-            </div>
-          </main>
-        </div>
+              {/* Contenedor de las tarjetas */}
+              <div className="flex flex-wrap justify-center gap-6">
+                <ListaAlumnos
+                  datosAlumnos={alumnosFiltrados}
+                  isAdmin={isAdmin}
+                  abrirModal={abrirModal}
+                  eliminarAlumno={eliminarAlumno}
+                />
+              </div>
+            </main>
+          </div>
+          {modalAbierto && (
+            <FormularioAlumno
+              alumno={alumnoEditar}
+              cerrarModal={cerrarModal}
+              guardarCambios={guardarCambios}
+            />
+          )}
+        </>
       )}
     </>
   );

@@ -3,7 +3,12 @@ import { Avatar } from "./Avatar";
 
 // Componente que renderiza una lista de tarjetas de alumnos
 // Recibe: datosAlumnos (array de objetos alumno)
-export function ListaAlumnos({ datosAlumnos }) {
+export function ListaAlumnos({
+  datosAlumnos,
+  isAdmin,
+  abrirModal,
+  eliminarAlumno,
+}) {
   return (
     // Mapea cada alumno y crea un componente Alumno por cada uno
     datosAlumnos.map((alumno, index) => (
@@ -13,6 +18,9 @@ export function ListaAlumnos({ datosAlumnos }) {
         grupo={alumno.grupo}
         promocion={alumno.promocion}
         key={index}
+        isAdmin={isAdmin}
+        abrirModal={() => abrirModal(alumno)}
+        eliminarAlumno={() => eliminarAlumno(index)}
       >
         {/* Avatar se pasa como children */}
         <Avatar img={alumno.img} />
