@@ -6,6 +6,7 @@ import { ListaAlumnos } from "./components/ListaAlumnos";
 import { ControlInput } from "./components/ControlInput";
 import { LoginForm } from "./components/LoginForm";
 import { FormularioAlumno } from "./components/FormularioAlumno";
+import { InfoAdmin } from "./components/InfoAdmin";
 
 function App() {
   const [promocion, setPromocion] = useState("");
@@ -17,6 +18,7 @@ function App() {
   const [logueado, setLogueado] = useState(false);
   const [modalAbierto, setModalAbierto] = useState(false);
   const [alumnoEditar, setAlumnoEditar] = useState(null);
+  const [isNew, setIsNew] = useState(false);
 
   const datosPromo = ["25/26", "26/27", "27/28"];
 
@@ -160,8 +162,12 @@ function App() {
 
   useEffect(() => {
     const usuarioGuardado = localStorage.getItem("usuario");
+    const roleGuardado = localStorage.getItem("role");
+
     if (usuarioGuardado) {
       setLogueado(true);
+      setUsuario(usuarioGuardado);
+      setIsAdmin(roleGuardado === "admin");
     }
   }, []);
 
@@ -191,8 +197,10 @@ function App() {
       localStorage.setItem("usuario", usuario);
       if (usuarioValidado.role === "admin") {
         setIsAdmin(true);
+        localStorage.setItem("role", usuarioValidado.role);
       } else {
         setIsAdmin(false);
+        localStorage.setItem("role", usuarioValidado.role);
       }
     } else {
       alert("Usuario o contraseña incorrectos");
@@ -214,7 +222,10 @@ function App() {
 
   function salir() {
     setLogueado(false);
+    setUsuario("");
+    setIsAdmin(false);
     localStorage.removeItem("usuario");
+    localStorage.removeItem("role");
   }
 
   // Filtra los alumnos por la promoción seleccionada
@@ -268,6 +279,7 @@ function App() {
                       Encuentra estudiantes por promoción, grupo o nombre
                     </p>
                   </div>
+                  <InfoAdmin usuario={usuario} isAdmin={isAdmin}></InfoAdmin>
                   <button
                     onClick={salir}
                     className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
@@ -350,6 +362,7 @@ function App() {
               alumno={alumnoEditar}
               cerrarModal={cerrarModal}
               guardarCambios={guardarCambios}
+              isNew={isNew}
             />
           )}
         </>

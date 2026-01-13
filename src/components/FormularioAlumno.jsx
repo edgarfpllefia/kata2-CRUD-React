@@ -35,9 +35,9 @@ export function FormularioAlumno({ alumno, cerrarModal, guardarCambios }) {
 
   return (
     // Fondo semitransparente que deja ver el anuario detrás
-    <div 
-      className="fixed inset-0 flex items-center justify-center z-50" 
-      style={{ backgroundColor: 'rgba(100, 116, 139, 0.25)' }}
+    <div
+      className="fixed inset-0 flex items-center justify-center z-50"
+      style={{ backgroundColor: "rgba(100, 116, 139, 0.25)" }}
     >
       {/* Contenedor blanco del formulario */}
       <div className="bg-white p-8 rounded-lg shadow-xl max-w-md w-full relative">
@@ -49,6 +49,7 @@ export function FormularioAlumno({ alumno, cerrarModal, guardarCambios }) {
           &times;
         </button>
 
+        
         <h2 className="text-2xl font-bold mb-6 text-gray-800">Editar Alumno</h2>
 
         <form onSubmit={handleForm} className="space-y-4">
