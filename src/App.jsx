@@ -48,12 +48,14 @@ function App() {
     },
     {
       id: 3,
+      nombre: "raul",
       apellido: "gomez",
       promocion: "27/28",
       grupo: "ARI",
       img: "https://randomuser.me/api/portraits/women/3.jpg",
     },
     {
+      id: 4,
       nombre: "carlos",
       apellido: "martinez",
       promocion: "25/26",
@@ -61,6 +63,7 @@ function App() {
       img: "https://randomuser.me/api/portraits/men/4.jpg",
     },
     {
+      id: 5,
       nombre: "lucia",
       apellido: "rodriguez",
       promocion: "26/27",
@@ -68,6 +71,7 @@ function App() {
       img: "https://randomuser.me/api/portraits/women/5.jpg",
     },
     {
+      id: 6,
       nombre: "jorge",
       apellido: "fernandez",
       promocion: "27/28",
@@ -75,6 +79,7 @@ function App() {
       img: "https://randomuser.me/api/portraits/men/6.jpg",
     },
     {
+      id: 7,
       nombre: "laura",
       apellido: "garcia",
       promocion: "25/26",
@@ -82,6 +87,7 @@ function App() {
       img: "https://randomuser.me/api/portraits/women/7.jpg",
     },
     {
+      id: 8,
       nombre: "david",
       apellido: "moreno",
       promocion: "26/27",
@@ -89,6 +95,7 @@ function App() {
       img: "https://randomuser.me/api/portraits/men/8.jpg",
     },
     {
+      id: 9,
       nombre: "sofia",
       apellido: "jimenez",
       promocion: "27/28",
@@ -96,6 +103,7 @@ function App() {
       img: "https://randomuser.me/api/portraits/women/9.jpg",
     },
     {
+      id: 10,
       nombre: "miguel",
       apellido: "ruiz",
       promocion: "25/26",
@@ -103,6 +111,7 @@ function App() {
       img: "https://randomuser.me/api/portraits/men/10.jpg",
     },
     {
+      id: 11,
       nombre: "carmen",
       apellido: "diaz",
       promocion: "26/27",
@@ -110,6 +119,7 @@ function App() {
       img: "https://randomuser.me/api/portraits/women/11.jpg",
     },
     {
+      id: 12,
       nombre: "pablo",
       apellido: "hernandez",
       promocion: "27/28",
@@ -117,6 +127,7 @@ function App() {
       img: "https://randomuser.me/api/portraits/men/12.jpg",
     },
     {
+      id: 13,
       nombre: "elena",
       apellido: "alvarez",
       promocion: "25/26",
@@ -124,6 +135,7 @@ function App() {
       img: "https://randomuser.me/api/portraits/women/13.jpg",
     },
     {
+      id: 14,
       nombre: "javier",
       apellido: "romero",
       promocion: "26/27",
@@ -131,6 +143,7 @@ function App() {
       img: "https://randomuser.me/api/portraits/men/14.jpg",
     },
     {
+      id: 15,
       nombre: "raquel",
       apellido: "torres",
       promocion: "27/28",
@@ -138,6 +151,7 @@ function App() {
       img: "https://randomuser.me/api/portraits/women/15.jpg",
     },
     {
+      id: 16,
       nombre: "antonio",
       apellido: "navarro",
       promocion: "25/26",
@@ -145,6 +159,7 @@ function App() {
       img: "https://randomuser.me/api/portraits/men/16.jpg",
     },
     {
+      id: 17,
       nombre: "beatriz",
       apellido: "vazquez",
       promocion: "26/27",
@@ -152,6 +167,7 @@ function App() {
       img: "https://randomuser.me/api/portraits/women/17.jpg",
     },
     {
+      id: 18,
       nombre: "roberto",
       apellido: "castillo",
       promocion: "27/28",
@@ -171,8 +187,9 @@ function App() {
     }
   }, []);
 
-  const abrirModal = (alumno) => {
+  const abrirModal = (alumno = null) => {
     setAlumnoEditar(alumno);
+    setIsNew(alumno === null);
     setModalAbierto(true);
   };
 
@@ -181,16 +198,15 @@ function App() {
     setModalAbierto(false);
   };
 
-  const eliminarAlumno = (index) => {
-    const nuevoArray = datosAlumnos.filter((_, i) => i !== index);
-    console.log("Alumno eliminado");
+  const eliminarAlumno = (id) => {
+    const nuevoArray = datosAlumnos.filter((alumno) => alumno.id !== id);
     setDatosAlumnos(nuevoArray);
   };
 
   function entrar(e) {
     e.preventDefault();
     const usuarioValidado = usuarios.find(
-      (u) => u.username === usuario && u.password === password
+      (u) => u.username === usuario && u.password === password,
     );
     if (usuarioValidado) {
       setLogueado(true);
@@ -208,16 +224,32 @@ function App() {
   }
 
   function guardarCambios(alumnoEditado) {
-    const nuevoArray = datosAlumnos.map((a) => {
-      // Compara por referencia del objeto original
-      if (a === alumnoEditar) {
-        return alumnoEditado;
-      }
-      return a;
-    });
+    // Determinar si es nuevo basándose en alumnoEditar, no en isNew
+    const esNuevo = alumnoEditar === null;
+    
+    if (esNuevo) {
+      const nuevoId =
+        datosAlumnos.length > 0
+          ? Math.max(...datosAlumnos.map((a) => a.id || 0)) + 1
+          : 1;
 
-    setDatosAlumnos(nuevoArray);
-    console.log("Cambios guardados", alumnoEditado);
+      const nuevoAlumno = {
+        id: nuevoId,
+        ...alumnoEditado,
+      };
+
+      setDatosAlumnos([...datosAlumnos, nuevoAlumno]);
+    } else {
+      const nuevoArray = datosAlumnos.map((a) => {
+        // Compara por referencia del objeto original
+        if (a === alumnoEditar) {
+          return alumnoEditado;
+        }
+        return a;
+      });
+
+      setDatosAlumnos(nuevoArray);
+    }
   }
 
   function salir() {
@@ -246,13 +278,11 @@ function App() {
 
   // Función que se ejecuta cuando cambias el selector de promoción
   function controlPromocion(e) {
-    console.log(e.target.value);
     setPromocion(e.target.value);
   }
 
   // Función que se ejecuta cuando cambias el selector de grupo
   function controlGrupo(e) {
-    console.log(e.target.value);
     setGrupo(e.target.value);
   }
 
@@ -331,6 +361,16 @@ function App() {
                     Buscar por nombre o apellido
                   </label>
                   <ControlInput nombre={setNombre} />
+                </div>
+                <div className="mt-4">
+                  {isAdmin && (
+                    <button
+                      onClick={() => abrirModal()}
+                      className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+                    >
+                      Crear alumno
+                    </button>
+                  )}
                 </div>
               </div>
 

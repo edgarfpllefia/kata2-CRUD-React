@@ -1,11 +1,16 @@
 import { useState, useEffect } from "react";
 
-export function FormularioAlumno({ alumno, cerrarModal, guardarCambios }) {
-  const [nombre, setNombre] = useState(alumno.nombre);
-  const [apellido, setApellido] = useState(alumno.apellido);
-  const [promocion, setPromocion] = useState(alumno.promocion);
-  const [grupo, setGrupo] = useState(alumno.grupo);
-  const [img, setImg] = useState(alumno.img);
+export function FormularioAlumno({
+  alumno,
+  cerrarModal,
+  guardarCambios,
+  isNew,
+}) {
+  const [nombre, setNombre] = useState(alumno?.nombre || "");
+  const [apellido, setApellido] = useState(alumno?.apellido || "");
+  const [promocion, setPromocion] = useState(alumno?.promocion || "");
+  const [grupo, setGrupo] = useState(alumno?.grupo || "");
+  const [img, setImg] = useState(alumno?.img || "");
 
   // Bloquear scroll cuando se monta el modal
   useEffect(() => {
@@ -27,10 +32,7 @@ export function FormularioAlumno({ alumno, cerrarModal, guardarCambios }) {
     };
 
     guardarCambios(alumnoEditado);
-
     cerrarModal();
-
-    console.log("Formulario enviado");
   };
 
   return (
@@ -49,8 +51,9 @@ export function FormularioAlumno({ alumno, cerrarModal, guardarCambios }) {
           &times;
         </button>
 
-        
-        <h2 className="text-2xl font-bold mb-6 text-gray-800">Editar Alumno</h2>
+        <h2 className="text-2xl font-bold mb-6 text-gray-800">
+          {isNew ? "Crear Alumno" : "Editar Alumno"}
+        </h2>
 
         <form onSubmit={handleForm} className="space-y-4">
           <fieldset>

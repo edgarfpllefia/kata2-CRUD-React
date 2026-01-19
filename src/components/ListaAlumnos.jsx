@@ -11,16 +11,16 @@ export function ListaAlumnos({
 }) {
   return (
     // Mapea cada alumno y crea un componente Alumno por cada uno
-    datosAlumnos.map((alumno, index) => (
+    datosAlumnos.map((alumno) => (
       <Alumno
         nombre={alumno.nombre}
         apellido={alumno.apellido}
         grupo={alumno.grupo}
         promocion={alumno.promocion}
-        key={index}
+        key={alumno.id}
         isAdmin={isAdmin}
         abrirModal={() => abrirModal(alumno)}
-        eliminarAlumno={() => eliminarAlumno(index)}
+        eliminarAlumno={() => eliminarAlumno(alumno.id)}
       >
         {/* Avatar se pasa como children */}
         <Avatar img={alumno.img} />
