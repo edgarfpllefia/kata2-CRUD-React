@@ -1,0 +1,47 @@
+[
+  {
+    "id": 1,
+    "nombre": "Juan",
+    "apellido": "García",
+    "email": "juan.garcia@example.com",
+    "promocion": "25/26",
+    "grupo": "DAW1",
+    "avatar": "https://i.pravatar.cc/150?img=1"
+  },
+  {
+    "id": 2,
+    "nombre": "María",
+    "apellido": "López",
+    "email": "maria.lopez@example.com",
+    "promocion": "25/26",
+    "grupo": "SMX",
+    "avatar": "https://i.pravatar.cc/150?img=2"
+  },
+  {
+    "id": 3,
+    "nombre": "Carlos",
+    "apellido": "Martínez",
+    "email": "carlos.martinez@example.com",
+    "promocion": "26/27",
+    "grupo": "DAW1",
+    "avatar": "https://i.pravatar.cc/150?img=3"
+  },
+  {
+    "id": 4,
+    "nombre": "Ana",
+    "apellido": "Fernández",
+    "email": "ana.fernandez@example.com",
+    "promocion": "25/26",
+    "grupo": "ARI",
+    "avatar": "https://i.pravatar.cc/150?img=4"
+  },
+  {
+    "id": 5,
+    "nombre": "Pedro",
+    "apellido": "Sánchez",
+    "email": "pedro.sanchez@example.com",
+    "promocion": "27/28",
+    "grupo": "IEA",
+    "avatar": "https://i.pravatar.cc/150?img=5"
+  }
+]

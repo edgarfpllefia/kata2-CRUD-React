@@ -7,6 +7,7 @@ import { ControlInput } from "./components/ControlInput";
 import { LoginForm } from "./components/LoginForm";
 import { FormularioAlumno } from "./components/FormularioAlumno";
 import { InfoAdmin } from "./components/InfoAdmin";
+import { alumnosService } from "./services/alumnosService";
 
 function App() {
   const [promocion, setPromocion] = useState("");
@@ -20,6 +21,11 @@ function App() {
   const [alumnoEditar, setAlumnoEditar] = useState(null);
   const [isNew, setIsNew] = useState(false);
 
+  /*****************/
+
+  // const [resultado, setResultado] = useState();
+  // const [formData, setFormData] = useState();
+
   const datosPromo = ["25/26", "26/27", "27/28"];
 
   const datosGrupos = ["DAW1", "SMX", "ARI", "IEA"];
@@ -29,152 +35,43 @@ function App() {
     { username: "user", password: "123", role: "user" },
   ];
 
-  const [datosAlumnos, setDatosAlumnos] = useState([
-    {
-      id: 1,
-      nombre: "pepe",
-      apellido: "sanchez",
-      promocion: "25/26",
-      grupo: "DAW1",
-      img: "https://randomuser.me/api/portraits/men/1.jpg",
-    },
-    {
-      id: 2,
-      nombre: "ana",
-      apellido: "lopez",
-      promocion: "26/27",
-      grupo: "SMX",
-      img: "https://randomuser.me/api/portraits/women/2.jpg",
-    },
-    {
-      id: 3,
-      nombre: "raul",
-      apellido: "gomez",
-      promocion: "27/28",
-      grupo: "ARI",
-      img: "https://randomuser.me/api/portraits/women/3.jpg",
-    },
-    {
-      id: 4,
-      nombre: "carlos",
-      apellido: "martinez",
-      promocion: "25/26",
-      grupo: "IEA",
-      img: "https://randomuser.me/api/portraits/men/4.jpg",
-    },
-    {
-      id: 5,
-      nombre: "lucia",
-      apellido: "rodriguez",
-      promocion: "26/27",
-      grupo: "DAW1",
-      img: "https://randomuser.me/api/portraits/women/5.jpg",
-    },
-    {
-      id: 6,
-      nombre: "jorge",
-      apellido: "fernandez",
-      promocion: "27/28",
-      grupo: "SMX",
-      img: "https://randomuser.me/api/portraits/men/6.jpg",
-    },
-    {
-      id: 7,
-      nombre: "laura",
-      apellido: "garcia",
-      promocion: "25/26",
-      grupo: "ARI",
-      img: "https://randomuser.me/api/portraits/women/7.jpg",
-    },
-    {
-      id: 8,
-      nombre: "david",
-      apellido: "moreno",
-      promocion: "26/27",
-      grupo: "IEA",
-      img: "https://randomuser.me/api/portraits/men/8.jpg",
-    },
-    {
-      id: 9,
-      nombre: "sofia",
-      apellido: "jimenez",
-      promocion: "27/28",
-      grupo: "DAW1",
-      img: "https://randomuser.me/api/portraits/women/9.jpg",
-    },
-    {
-      id: 10,
-      nombre: "miguel",
-      apellido: "ruiz",
-      promocion: "25/26",
-      grupo: "SMX",
-      img: "https://randomuser.me/api/portraits/men/10.jpg",
-    },
-    {
-      id: 11,
-      nombre: "carmen",
-      apellido: "diaz",
-      promocion: "26/27",
-      grupo: "ARI",
-      img: "https://randomuser.me/api/portraits/women/11.jpg",
-    },
-    {
-      id: 12,
-      nombre: "pablo",
-      apellido: "hernandez",
-      promocion: "27/28",
-      grupo: "IEA",
-      img: "https://randomuser.me/api/portraits/men/12.jpg",
-    },
-    {
-      id: 13,
-      nombre: "elena",
-      apellido: "alvarez",
-      promocion: "25/26",
-      grupo: "DAW1",
-      img: "https://randomuser.me/api/portraits/women/13.jpg",
-    },
-    {
-      id: 14,
-      nombre: "javier",
-      apellido: "romero",
-      promocion: "26/27",
-      grupo: "SMX",
-      img: "https://randomuser.me/api/portraits/men/14.jpg",
-    },
-    {
-      id: 15,
-      nombre: "raquel",
-      apellido: "torres",
-      promocion: "27/28",
-      grupo: "ARI",
-      img: "https://randomuser.me/api/portraits/women/15.jpg",
-    },
-    {
-      id: 16,
-      nombre: "antonio",
-      apellido: "navarro",
-      promocion: "25/26",
-      grupo: "IEA",
-      img: "https://randomuser.me/api/portraits/men/16.jpg",
-    },
-    {
-      id: 17,
-      nombre: "beatriz",
-      apellido: "vazquez",
-      promocion: "26/27",
-      grupo: "DAW1",
-      img: "https://randomuser.me/api/portraits/women/17.jpg",
-    },
-    {
-      id: 18,
-      nombre: "roberto",
-      apellido: "castillo",
-      promocion: "27/28",
-      grupo: "SMX",
-      img: "https://randomuser.me/api/portraits/men/18.jpg",
-    },
-  ]);
+  // useEffect(() => {
+  //   setCargando(true);
+  //   async function leerAlumnos() {
+  //     const respuesta = await fetch("http://localhost:3000/api/alumnos");
+  //     const resultado = await respuesta.json();
+  //     return setResultado(resultado);
+  //   }
+  //   setCargando(false);
+  // }, []);
+
+  // const handleChange = (e) => {
+  //   setFormData({
+  //     ...formData,
+  //     [e.target.name]: e.target.value,
+  //   });
+  // };
+
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   console.log("dentro");
+  //   try {
+  //     const response = await fetch("http://localhost:3000/api/alumnos", {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify(formData),
+  //     });
+  //   } catch (error) {
+  //     console.error("Error:", error);
+  //   }
+  // };
+
+  // Cargar alumnos usando el service (carga desde localStorage o JSON inicial)
+  const [datosAlumnos, setDatosAlumnos] = useState(() => {
+    return alumnosService.getAll();
+  });
 
   useEffect(() => {
     const usuarioGuardado = localStorage.getItem("usuario");
@@ -199,8 +96,8 @@ function App() {
   };
 
   const eliminarAlumno = (id) => {
-    const nuevoArray = datosAlumnos.filter((alumno) => alumno.id !== id);
-    setDatosAlumnos(nuevoArray);
+    alumnosService.delete(id);
+    setDatosAlumnos(alumnosService.getAll());
   };
 
   function entrar(e) {
@@ -224,32 +121,19 @@ function App() {
   }
 
   function guardarCambios(alumnoEditado) {
-    // Determinar si es nuevo basándose en alumnoEditar, no en isNew
+    // Determinar si es nuevo basándose en alumnoEditar
     const esNuevo = alumnoEditar === null;
-    
+
     if (esNuevo) {
-      const nuevoId =
-        datosAlumnos.length > 0
-          ? Math.max(...datosAlumnos.map((a) => a.id || 0)) + 1
-          : 1;
-
-      const nuevoAlumno = {
-        id: nuevoId,
-        ...alumnoEditado,
-      };
-
-      setDatosAlumnos([...datosAlumnos, nuevoAlumno]);
+      // Crear nuevo alumno
+      alumnosService.create(alumnoEditado);
     } else {
-      const nuevoArray = datosAlumnos.map((a) => {
-        // Compara por referencia del objeto original
-        if (a === alumnoEditar) {
-          return alumnoEditado;
-        }
-        return a;
-      });
-
-      setDatosAlumnos(nuevoArray);
+      // Actualizar alumno existente
+      alumnosService.update(alumnoEditar.id, alumnoEditado);
     }
+
+    // Recargar datos desde el service
+    setDatosAlumnos(alumnosService.getAll());
   }
 
   function salir() {
