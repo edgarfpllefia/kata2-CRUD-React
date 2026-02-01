@@ -68,10 +68,17 @@ function App() {
   //   }
   // };
 
-  // Cargar alumnos usando el service (carga desde localStorage o JSON inicial)
-  const [datosAlumnos, setDatosAlumnos] = useState(() => {
-    return alumnosService.getAll();
-  });
+  // Cargar alumnos usando el service
+  const [datosAlumnos, setDatosAlumnos] = useState([]);
+
+  // Cargar alumnos al iniciar (funciona con localStorage y API)
+  useEffect(() => {
+    const cargarAlumnos = async () => {
+      const alumnos = await alumnosService.getAll();
+      setDatosAlumnos(alumnos);
+    };
+    cargarAlumnos();
+  }, []);
 
   useEffect(() => {
     const usuarioGuardado = localStorage.getItem("usuario");
@@ -95,9 +102,10 @@ function App() {
     setModalAbierto(false);
   };
 
-  const eliminarAlumno = (id) => {
-    alumnosService.delete(id);
-    setDatosAlumnos(alumnosService.getAll());
+  const eliminarAlumno = async (id) => {
+    await alumnosService.delete(id);
+    const alumnos = await alumnosService.getAll();
+    setDatosAlumnos(alumnos);
   };
 
   function entrar(e) {
@@ -120,20 +128,21 @@ function App() {
     }
   }
 
-  function guardarCambios(alumnoEditado) {
+  async function guardarCambios(alumnoEditado) {
     // Determinar si es nuevo basándose en alumnoEditar
     const esNuevo = alumnoEditar === null;
 
     if (esNuevo) {
       // Crear nuevo alumno
-      alumnosService.create(alumnoEditado);
+      await alumnosService.create(alumnoEditado);
     } else {
       // Actualizar alumno existente
-      alumnosService.update(alumnoEditar.id, alumnoEditado);
+      await alumnosService.update(alumnoEditar.id, alumnoEditado);
     }
 
     // Recargar datos desde el service
-    setDatosAlumnos(alumnosService.getAll());
+    const alumnos = await alumnosService.getAll();
+    setDatosAlumnos(alumnos);
   }
 
   function salir() {

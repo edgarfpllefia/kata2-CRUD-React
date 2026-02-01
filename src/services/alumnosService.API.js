@@ -1,61 +1,8 @@
-import alumnosIniciales from "../data/alumnos.json";
-
-// ⚙️ CONFIGURACIÓN: Cambia esto para usar API o localStorage
-const USE_API = false; // true = API, false = localStorage
+// Configuración de la API
 const API_URL = "http://localhost:3000/api/alumnos";
-const STORAGE_KEY = "alumnos";
 
-// ==================== FUNCIONES LOCALSTORAGE ====================
-const localStorageService = {
-  getAll: () => {
-    const alumnosGuardados = localStorage.getItem(STORAGE_KEY);
-    if (alumnosGuardados) {
-      return JSON.parse(alumnosGuardados);
-    }
-    return alumnosIniciales;
-  },
-
-  saveAll: (alumnos) => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(alumnos));
-  },
-
-  create: (alumno) => {
-    const alumnos = localStorageService.getAll();
-    const nuevoId =
-      alumnos.length > 0 ? Math.max(...alumnos.map((a) => a.id || 0)) + 1 : 1;
-
-    const nuevoAlumno = {
-      id: nuevoId,
-      ...alumno,
-    };
-
-    const nuevosAlumnos = [...alumnos, nuevoAlumno];
-    localStorageService.saveAll(nuevosAlumnos);
-
-    return nuevoAlumno;
-  },
-
-  update: (id, datos) => {
-    const alumnos = localStorageService.getAll();
-    const nuevosAlumnos = alumnos.map((alumno) =>
-      alumno.id === id ? { ...alumno, ...datos } : alumno
-    );
-    localStorageService.saveAll(nuevosAlumnos);
-
-    return nuevosAlumnos.find((a) => a.id === id);
-  },
-
-  delete: (id) => {
-    const alumnos = localStorageService.getAll();
-    const nuevosAlumnos = alumnos.filter((alumno) => alumno.id !== id);
-    localStorageService.saveAll(nuevosAlumnos);
-
-    return true;
-  },
-};
-
-// ==================== FUNCIONES API ====================
-const apiService = {
+export const alumnosService = {
+  // Obtener todos los alumnos desde la API
   getAll: async () => {
     try {
       const response = await fetch(API_URL);
@@ -70,10 +17,12 @@ const apiService = {
     }
   },
 
-  saveAll: () => {
+  // Guardar todos los alumnos (no se usa con API, pero lo dejo por compatibilidad)
+  saveAll: (alumnos) => {
     console.warn("saveAll no se usa con API");
   },
 
+  // Crear un nuevo alumno
   create: async (alumno) => {
     try {
       const response = await fetch(API_URL, {
@@ -96,6 +45,7 @@ const apiService = {
     }
   },
 
+  // Actualizar un alumno existente
   update: async (id, datos) => {
     try {
       const response = await fetch(`${API_URL}/${id}`, {
@@ -118,6 +68,7 @@ const apiService = {
     }
   },
 
+  // Eliminar un alumno
   delete: async (id) => {
     try {
       const response = await fetch(`${API_URL}/${id}`, {
@@ -135,6 +86,3 @@ const apiService = {
     }
   },
 };
-
-// ==================== EXPORTACIÓN SEGÚN CONFIGURACIÓN ====================
-export const alumnosService = USE_API ? apiService : localStorageService;
