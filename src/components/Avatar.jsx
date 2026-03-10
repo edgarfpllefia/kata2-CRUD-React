@@ -1,8 +1,8 @@
 // Componente que renderiza la imagen del alumno
-export function Avatar({ img }) {
+export function Avatar({ urlImagen }) {
   return (
     <img
-      src={img}
+      src={urlImagen}
       alt="Avatar del alumno"
       className="w-full h-full object-cover"
     />

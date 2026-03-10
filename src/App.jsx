@@ -68,10 +68,17 @@ function App() {
   //   }
   // };
 
-  // Cargar alumnos usando el service (carga desde localStorage o JSON inicial)
-  const [datosAlumnos, setDatosAlumnos] = useState(() => {
-    return alumnosService.getAll();
-  });
+  // Cargar alumnos usando el service
+  const [datosAlumnos, setDatosAlumnos] = useState([]);
+
+  // Cargar alumnos al iniciar (funciona con localStorage y API)
+  useEffect(() => {
+    const cargarAlumnos = async () => {
+      const alumnos = await alumnosService.getAll();
+      setDatosAlumnos(alumnos);
+    };
+    cargarAlumnos();
+  }, []);
 
   useEffect(() => {
     const usuarioGuardado = localStorage.getItem("usuario");
@@ -95,9 +102,12 @@ function App() {
     setModalAbierto(false);
   };
 
-  const eliminarAlumno = (id) => {
-    alumnosService.delete(id);
-    setDatosAlumnos(alumnosService.getAll());
+  const eliminarAlumno = async (id) => {
+    console.log('🗑️ Eliminando alumno con ID:', id);
+    await alumnosService.delete(id);
+    const alumnos = await alumnosService.getAll();
+    console.log('✅ Alumnos después de eliminar:', alumnos);
+    setDatosAlumnos(alumnos);
   };
 
   function entrar(e) {
@@ -120,20 +130,27 @@ function App() {
     }
   }
 
-  function guardarCambios(alumnoEditado) {
+  async function guardarCambios(alumnoEditado) {
+    console.log('💾 Guardando alumno:', alumnoEditado);
+    console.log('📝 alumnoEditar:', alumnoEditar);
     // Determinar si es nuevo basándose en alumnoEditar
     const esNuevo = alumnoEditar === null;
+    console.log('🆕 Es nuevo?', esNuevo);
 
     if (esNuevo) {
       // Crear nuevo alumno
-      alumnosService.create(alumnoEditado);
+      console.log('➕ Creando nuevo alumno...');
+      await alumnosService.create(alumnoEditado);
     } else {
       // Actualizar alumno existente
-      alumnosService.update(alumnoEditar.id, alumnoEditado);
+      console.log('✏️ Actualizando alumno con ID:', alumnoEditar.id);
+      await alumnosService.update(alumnoEditar.id, alumnoEditado);
     }
 
     // Recargar datos desde el service
-    setDatosAlumnos(alumnosService.getAll());
+    const alumnos = await alumnosService.getAll();
+    console.log('✅ Alumnos después de guardar:', alumnos);
+    setDatosAlumnos(alumnos);
   }
 
   function salir() {
@@ -150,10 +167,10 @@ function App() {
     const cumplePromocion = promocion === "" || alumno.promocion === promocion;
 
     // Si hay grupo seleccionado, debe cumplirlo. Si no hay, pasa el filtro
-    const cumpleGrupo = grupo === "" || alumno.grupo === grupo;
+    const cumpleGrupo = grupo === "" || alumno.ciclo === grupo;
 
-    // Busca en nombre Y apellido con un solo input
-    const nombreCompleto = `${alumno.nombre} ${alumno.apellido}`.toLowerCase();
+    // Busca en nombre Y apellidos con un solo input
+    const nombreCompleto = `${alumno.nombre} ${alumno.apellidos}`.toLowerCase();
     const cumpleNombre =
       nombre === "" || nombreCompleto.includes(nombre.toLowerCase());
 
