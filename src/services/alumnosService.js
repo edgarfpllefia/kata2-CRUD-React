@@ -1,7 +1,7 @@
 import alumnosIniciales from "../data/alumnos.json";
 
 const USE_API = true;
-const API_URL = "http://localhost:3000/api/alumnos";
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000/api/alumnos";
 const STORAGE_KEY = "alumnos";
 
 const localStorageService = {
