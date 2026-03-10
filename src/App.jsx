@@ -103,15 +103,8 @@ function App() {
   };
 
   const eliminarAlumno = async (id) => {
-<<<<<<< HEAD
     await alumnosService.delete(id);
     const alumnos = await alumnosService.getAll();
-=======
-    console.log('🗑️ Eliminando alumno con ID:', id);
-    await alumnosService.delete(id);
-    const alumnos = await alumnosService.getAll();
-    console.log('✅ Alumnos después de eliminar:', alumnos);
->>>>>>> api
     setDatosAlumnos(alumnos);
   };
 
