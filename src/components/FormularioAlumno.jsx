@@ -7,10 +7,11 @@ export function FormularioAlumno({
   isNew,
 }) {
   const [nombre, setNombre] = useState(alumno?.nombre || "");
-  const [apellido, setApellido] = useState(alumno?.apellido || "");
+  const [apellidos, setApellidos] = useState(alumno?.apellidos || "");
+  const [email, setEmail] = useState(alumno?.email || "");
   const [promocion, setPromocion] = useState(alumno?.promocion || "");
-  const [grupo, setGrupo] = useState(alumno?.grupo || "");
-  const [img, setImg] = useState(alumno?.img || "");
+  const [ciclo, setCiclo] = useState(alumno?.ciclo || "");
+  const [urlImagen, setUrlImagen] = useState(alumno?.urlImagen || "");
 
   // Bloquear scroll cuando se monta el modal
   useEffect(() => {
@@ -25,10 +26,11 @@ export function FormularioAlumno({
 
     const alumnoEditado = {
       nombre,
-      apellido,
+      apellidos,
+      email,
       promocion,
-      grupo,
-      img,
+      ciclo,
+      urlImagen,
     };
 
     guardarCambios(alumnoEditado);
@@ -74,17 +76,33 @@ export function FormularioAlumno({
           </fieldset>
           <fieldset>
             <label
-              htmlFor="apellido"
+              htmlFor="apellidos"
               className="block text-sm font-medium text-gray-700 mb-1"
             >
-              Apellido:
+              Apellidos:
             </label>
             <input
               type="text"
-              id="apellido"
-              name="apellido"
-              value={apellido}
-              onChange={(e) => setApellido(e.target.value)}
+              id="apellidos"
+              name="apellidos"
+              value={apellidos}
+              onChange={(e) => setApellidos(e.target.value)}
+              className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </fieldset>
+          <fieldset>
+            <label
+              htmlFor="email"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
+              Email:
+            </label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </fieldset>
@@ -106,33 +124,39 @@ export function FormularioAlumno({
           </fieldset>
           <fieldset>
             <label
-              htmlFor="grupo"
+              htmlFor="ciclo"
               className="block text-sm font-medium text-gray-700 mb-1"
             >
-              Grupo:
+              Ciclo:
             </label>
-            <input
-              type="text"
-              id="grupo"
-              name="grupo"
-              value={grupo}
-              onChange={(e) => setGrupo(e.target.value)}
+            <select
+              id="ciclo"
+              name="ciclo"
+              value={ciclo}
+              onChange={(e) => setCiclo(e.target.value)}
               className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
+            >
+              <option value="">Selecciona un ciclo</option>
+              <option value="DAW">DAW</option>
+              <option value="SMX">SMX</option>
+              <option value="ARI">ARI</option>
+              <option value="IEA">IEA</option>
+            </select>
           </fieldset>
           <fieldset>
             <label
-              htmlFor="img"
+              htmlFor="urlImagen"
               className="block text-sm font-medium text-gray-700 mb-1"
             >
-              Imagen URL:
+              URL Imagen:
             </label>
             <input
               type="text"
-              id="img"
-              name="img"
-              value={img}
-              onChange={(e) => setImg(e.target.value)}
+              id="urlImagen"
+              name="urlImagen"
+              value={urlImagen}
+              onChange={(e) => setUrlImagen(e.target.value)}
+              placeholder="https://i.pravatar.cc/150?img=1"
               className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </fieldset>

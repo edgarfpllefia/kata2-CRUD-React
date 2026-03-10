@@ -103,8 +103,15 @@ function App() {
   };
 
   const eliminarAlumno = async (id) => {
+<<<<<<< HEAD
     await alumnosService.delete(id);
     const alumnos = await alumnosService.getAll();
+=======
+    console.log('🗑️ Eliminando alumno con ID:', id);
+    await alumnosService.delete(id);
+    const alumnos = await alumnosService.getAll();
+    console.log('✅ Alumnos después de eliminar:', alumnos);
+>>>>>>> api
     setDatosAlumnos(alumnos);
   };
 
@@ -129,19 +136,37 @@ function App() {
   }
 
   async function guardarCambios(alumnoEditado) {
+<<<<<<< HEAD
+=======
+    console.log('💾 Guardando alumno:', alumnoEditado);
+    console.log('📝 alumnoEditar:', alumnoEditar);
+>>>>>>> api
     // Determinar si es nuevo basándose en alumnoEditar
     const esNuevo = alumnoEditar === null;
+    console.log('🆕 Es nuevo?', esNuevo);
 
     if (esNuevo) {
       // Crear nuevo alumno
+<<<<<<< HEAD
       await alumnosService.create(alumnoEditado);
     } else {
       // Actualizar alumno existente
+=======
+      console.log('➕ Creando nuevo alumno...');
+      await alumnosService.create(alumnoEditado);
+    } else {
+      // Actualizar alumno existente
+      console.log('✏️ Actualizando alumno con ID:', alumnoEditar.id);
+>>>>>>> api
       await alumnosService.update(alumnoEditar.id, alumnoEditado);
     }
 
     // Recargar datos desde el service
     const alumnos = await alumnosService.getAll();
+<<<<<<< HEAD
+=======
+    console.log('✅ Alumnos después de guardar:', alumnos);
+>>>>>>> api
     setDatosAlumnos(alumnos);
   }
 
@@ -159,10 +184,10 @@ function App() {
     const cumplePromocion = promocion === "" || alumno.promocion === promocion;
 
     // Si hay grupo seleccionado, debe cumplirlo. Si no hay, pasa el filtro
-    const cumpleGrupo = grupo === "" || alumno.grupo === grupo;
+    const cumpleGrupo = grupo === "" || alumno.ciclo === grupo;
 
-    // Busca en nombre Y apellido con un solo input
-    const nombreCompleto = `${alumno.nombre} ${alumno.apellido}`.toLowerCase();
+    // Busca en nombre Y apellidos con un solo input
+    const nombreCompleto = `${alumno.nombre} ${alumno.apellidos}`.toLowerCase();
     const cumpleNombre =
       nombre === "" || nombreCompleto.includes(nombre.toLowerCase());
 

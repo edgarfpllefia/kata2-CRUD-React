@@ -14,8 +14,8 @@ export function ListaAlumnos({
     datosAlumnos.map((alumno) => (
       <Alumno
         nombre={alumno.nombre}
-        apellido={alumno.apellido}
-        grupo={alumno.grupo}
+        apellidos={alumno.apellidos}
+        ciclo={alumno.ciclo}
         promocion={alumno.promocion}
         key={alumno.id}
         isAdmin={isAdmin}
@@ -23,7 +23,7 @@ export function ListaAlumnos({
         eliminarAlumno={() => eliminarAlumno(alumno.id)}
       >
         {/* Avatar se pasa como children */}
-        <Avatar img={alumno.img} />
+        <Avatar urlImagen={alumno.urlImagen} />
       </Alumno>
     ))
   );

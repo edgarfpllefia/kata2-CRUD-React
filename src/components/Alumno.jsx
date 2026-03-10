@@ -1,7 +1,7 @@
 export function Alumno({
   nombre,
-  apellido = "santo",
-  grupo,
+  apellidos,
+  ciclo,
   promocion,
   children,
   isAdmin,
@@ -17,13 +17,13 @@ export function Alumno({
 
       {/* Nombre del alumno */}
       <h4 className="text-2xl font-bold text-gray-800 mb-1 capitalize">
-        {nombre} {apellido}
+        {nombre} {apellidos}
       </h4>
 
-      {/* Info del grupo y promoción */}
+      {/* Info del ciclo y promoción */}
       <div className="flex flex-col gap-1 mt-3">
         <span className="inline-block px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-medium">
-          {grupo}
+          {ciclo}
         </span>
         <span className="inline-block px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm font-medium">
           {promocion}

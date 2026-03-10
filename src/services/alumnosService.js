@@ -1,11 +1,9 @@
 import alumnosIniciales from "../data/alumnos.json";
 
-// ⚙️ CONFIGURACIÓN: Cambia esto para usar API o localStorage
-const USE_API = false; // true = API, false = localStorage
+const USE_API = true;
 const API_URL = "http://localhost:3000/api/alumnos";
 const STORAGE_KEY = "alumnos";
 
-// ==================== FUNCIONES LOCALSTORAGE ====================
 const localStorageService = {
   getAll: () => {
     const alumnosGuardados = localStorage.getItem(STORAGE_KEY);
@@ -38,7 +36,7 @@ const localStorageService = {
   update: (id, datos) => {
     const alumnos = localStorageService.getAll();
     const nuevosAlumnos = alumnos.map((alumno) =>
-      alumno.id === id ? { ...alumno, ...datos } : alumno
+      alumno.id === id ? { ...alumno, ...datos } : alumno,
     );
     localStorageService.saveAll(nuevosAlumnos);
 
@@ -54,7 +52,6 @@ const localStorageService = {
   },
 };
 
-// ==================== FUNCIONES API ====================
 const apiService = {
   getAll: async () => {
     try {
@@ -136,5 +133,4 @@ const apiService = {
   },
 };
 
-// ==================== EXPORTACIÓN SEGÚN CONFIGURACIÓN ====================
 export const alumnosService = USE_API ? apiService : localStorageService;
