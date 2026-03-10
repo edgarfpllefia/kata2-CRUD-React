@@ -129,37 +129,25 @@ function App() {
   }
 
   async function guardarCambios(alumnoEditado) {
-<<<<<<< HEAD
-=======
-    console.log('💾 Guardando alumno:', alumnoEditado);
-    console.log('📝 alumnoEditar:', alumnoEditar);
->>>>>>> api
+    console.log("💾 Guardando alumno:", alumnoEditado);
+    console.log("📝 alumnoEditar:", alumnoEditar);
     // Determinar si es nuevo basándose en alumnoEditar
     const esNuevo = alumnoEditar === null;
-    console.log('🆕 Es nuevo?', esNuevo);
+    console.log("🆕 Es nuevo?", esNuevo);
 
     if (esNuevo) {
       // Crear nuevo alumno
-<<<<<<< HEAD
+      console.log("➕ Creando nuevo alumno...");
       await alumnosService.create(alumnoEditado);
     } else {
       // Actualizar alumno existente
-=======
-      console.log('➕ Creando nuevo alumno...');
-      await alumnosService.create(alumnoEditado);
-    } else {
-      // Actualizar alumno existente
-      console.log('✏️ Actualizando alumno con ID:', alumnoEditar.id);
->>>>>>> api
+      console.log("✏️ Actualizando alumno con ID:", alumnoEditar.id);
       await alumnosService.update(alumnoEditar.id, alumnoEditado);
     }
 
     // Recargar datos desde el service
     const alumnos = await alumnosService.getAll();
-<<<<<<< HEAD
-=======
-    console.log('✅ Alumnos después de guardar:', alumnos);
->>>>>>> api
+    console.log("✅ Alumnos después de guardar:", alumnos);
     setDatosAlumnos(alumnos);
   }
 
